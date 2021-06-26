@@ -3,3 +3,5 @@ src/node_modules/*
 src/pattern/*
 
 src/dist/*
+
+src/pattern.txt

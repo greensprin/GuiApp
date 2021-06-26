@@ -105,7 +105,7 @@ ipcMain.handle("write_param", (e, arg) => {
         const cmd = `notepad ${path.join(dir, filename)}` ; 
         console.log(cmd);
         // コマンド実行
-        childProcess.execSync(cmd);
+        childProcess.exec(cmd);
     })
 })
 
