@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
+  <title>run GUI</title>
+</head>
+<body>
+  <!-- Menu -->
+  <header>
+    <div id="crop" class="sm-btn">
+      <p>crop</p>
+    </div>
+  </header>
+
+  <!-- Button -->
+  <div class="exec-button-top">
+    <div class="top-header">
+      <p>button list</p>
+    </div>
+    <div class="btn-list">
+      <div class="btn-style" id="button1">
+        <p>button1</p>
+      </div>
+      <div class="btn-style" id="run">
+        <p>run</p>
+      </div>
+
+      <div class="btn-style" id="show-pat">
+        <p>show pat</p>
+      </div>
+
+      <div class="btn-style" id="chk-del">
+        <p>check del</p>
+      </div>
+      <div class="btn-style" id="chk-all">
+        <p>check all</p>
+      </div>
+      <!-- プロセス kill用 孫プロセスを削除できず、うまくいっていないのでコメントアウト -->
+      <!-- <div class="btn-style" id="kill-process"> -->
+        <!-- <p>proc kill</p> -->
+      <!-- </div> -->
+    </div>
+  </div>
+
+  <!-- Pattern -->
+  <div class="pat-table-top">
+    <div class="top-header">
+      <p>pattern list</p>
+    </div>
+    <div id="table-elem-top">
+      <!--
+      <div class="table-elem">
+        <label  for="checkbox1">
+          <input id="checkbox1" type="checkbox" class="pat-check-box">p0_sample_pattern
+        </label>
+      </div>
+      <div class="table-elem">
+        <label  for="checkbox2">
+          <input id="checkbox2" type="checkbox" class="pat-check-box">p0_sample_pattern_2
+        </label>
+      </div>
+      <div class="table-elem">
+        <label  for="checkbox3">
+          <input id="checkbox3" type="checkbox" class="pat-check-box">p0_sample_pattern_3
+        </label>
+      </div>
+      -->
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="js/script.js"></script>
+</body>
+</html>

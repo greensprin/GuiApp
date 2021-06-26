@@ -1,0 +1,4 @@
+パッケージ化ができない
+electron builderがよくわからない
+
+execで、リアルタイムでstdoutを取得できない

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
+  <title>crop menu</title>
+</head>
+<body>
+  <div class="crop-main">
+    <!-- ON/OFF -->
+    <div class="crop-onoff">
+      <label for="toggle" class="crop-onoff-label">
+        <input id="toggle" class="crop-onoff-toggle" type="checkbox"><span class="onoff-state"> Crop: OFF</span>
+      </label>
+    </div>
+
+    <!-- Full画像の枚数を指定するプルダウン -->
+    <div class="full-img-num">
+      <p>full img num: </p>
+      <select name="img-num-select" id="">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+    </div>
+
+    <!-- 一塊何個か -->
+    <div class="color-blob">
+      <p class="elem-txt color-blob-txt">color blob:</p>
+      <select name="cf-blob-num-select" id="">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6" selected>6</option>
+      </select>
+    </div>
+
+    <!-- 画像Crop位置の指定 -->
+    <div class="crop-pos">
+      <div class="crop-pos-sta">
+        <p>start</p>
+        <div class="pos-xy">
+          <p class="elem-txt">x:</p>
+          <input type="text" id="sta_x">
+        </div>
+        <div class="pos-xy">
+          <p class="elem-txt">y:</p>
+          <input type="text" id="sta_y">
+        </div>
+      </div>
+      <div class="crop-pos-end">
+        <div class="end-title">
+          <p>end or size</p>
+          <select name="end_or_size" id="">
+            <option value="end">end</option>
+            <option value="size">size</option>
+          </select>
+        </div>
+        <div class="pos-xy">
+          <p class="elem-txt">x:</p>
+          <input type="text" id="end_x">
+        </div>
+        <div class="pos-xy">
+          <p class="elem-txt">y:</p>
+          <input type="text" id="end_y">
+        </div>
+      </div>
+    </div>
+
+    <!-- 適用ボタン -->
+      <div class="apply-btn btn-style" id="apply">
+        <p>apply</p>
+      </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="js/script.js"></script>
+</body>
+</html>
