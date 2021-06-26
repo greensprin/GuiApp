@@ -76,6 +76,12 @@ $(function() {
     }
   }
 
+  // パタン名右クリックしたときの処理
+  $(document).on("contextmenu", ".table-elem", function() {
+    const text_str = $(this).text().replace(/\r?\n/g, "").trim();
+    window.api.write_param(text_str);
+  })
+
 
   // ===== Child =======
   // == crop ==

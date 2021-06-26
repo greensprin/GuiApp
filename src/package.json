@@ -18,13 +18,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ini": "^2.0.0"
+    "ini": "^2.0.0",
+    "npm-check-updates": "^11.7.1"
   },
   "devDependencies": {
-    "electron": "^12.0.4",
-    "electron-builder": "^22.10.5",
+    "electron": "^13.1.4",
+    "electron-builder": "^22.11.7",
     "electron-packager": "^15.2.0",
-    "fs": "0.0.1-security",
+    "fs": "^0.0.1-security",
     "path": "^0.12.7",
     "ps-tree": "^1.2.0",
     "yarn": "^1.22.10"

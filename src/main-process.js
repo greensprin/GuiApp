@@ -88,6 +88,27 @@ ipcMain.handle("crop_config", (e, ary_arg) => {
     fs.appendFileSync(crop_config_file, "end_y="+ary_arg[7]+"\n", "utf8");
 });
 
+ipcMain.handle("write_param", (e, arg) => {
+    // 設定ファイル取得
+    const config = ini.parse(fs.readFileSync(path.join(cur_dir, "config.ini"), "utf8")); // read config.ini
+    // 探索するフォルダを指定
+    const test_dir = config.test_case.dir_path;
+    const dir = path.join(test_dir, arg)
+
+    // フォルダ内のファイルを取得
+    const filenames = fs.readdirSync(dir);
+
+    // ファイルを順番に開いて編集できるようにしている。ファイルがなければ何も起動されない。
+    // 基本的には1ファイルしかないことを想定していいと思うが一応
+    filenames.forEach((filename) => {
+        // コマンド設定
+        const cmd = `notepad ${path.join(dir, filename)}` ; 
+        console.log(cmd);
+        // コマンド実行
+        childProcess.execSync(cmd);
+    })
+})
+
 ipcMain.handle("process_kill", (e) => {
     // プロセス削除
     if (process_state === 1) {

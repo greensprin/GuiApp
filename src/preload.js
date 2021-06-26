@@ -5,4 +5,5 @@ contextBridge.exposeInMainWorld("api", {
   show_pat:     async ()     => await ipcRenderer.invoke("show_pat"),
   process_kill: async ()     => await ipcRenderer.invoke("process_kill"),
   crop_config:  async (data) => await ipcRenderer.invoke("crop_config", data),
+  write_param:  async (data) => await ipcRenderer.invoke("write_param", data),
 });
