@@ -35,7 +35,9 @@ header {
 }
 
 .sm-btn {
-  $sm-btn-w: 40px;
+  display: block;
+
+  $sm-btn-w: 45px;
   $transition-time: 0.3s;
 
   width: $sm-btn-w;

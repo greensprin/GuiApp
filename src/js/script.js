@@ -23,23 +23,30 @@ $(function() {
   })
 
   // edit メニューを押した時の処理
-  $("#edit").on("click", function() {
-    url = "edit.html";
-    const win = window.open(url, "", "width=245, height=430");
-  })
+  {
+    $("#edit").on("click", function() {
+      url = "edit.html";
+      const win = window.open(url, "", "width=245, height=430");
+    })
 
-  // edit メニューのファイル編集ボタンを押したときの処理
-  $("#edit-blocks-xlsx").on("click", function() {
-    window.api.edit_file("blocks_xlsx");   
-  })
-  $("#edit-blocks-vsdx").on("click", function() {
-    window.api.edit_file("blocks_vsdx");   
-  })
-  $("#edit-param-xlsx").on("click", function() {
-    window.api.edit_file("param_xlsx");   
-  })
-  $("#edit-testcase-xlsx").on("click", function() {
-    window.api.edit_file("testcase_xlsx");   
+    // edit メニューのファイル編集ボタンを押したときの処理
+    $("#edit-blocks-xlsx").on("click", function() {
+      window.api.edit_file("blocks_xlsx");   
+    })
+    $("#edit-blocks-vsdx").on("click", function() {
+      window.api.edit_file("blocks_vsdx");   
+    })
+    $("#edit-param-xlsx").on("click", function() {
+      window.api.edit_file("param_xlsx");   
+    })
+    $("#edit-testcase-xlsx").on("click", function() {
+      window.api.edit_file("testcase_xlsx");   
+    })
+  }
+
+  // config を開く
+  $("#config").on("click", function() {
+    window.api.edit_file("config");   
   })
 
   $("#run").on("click", function() {

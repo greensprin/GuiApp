@@ -35,7 +35,7 @@ app.on( 'ready', () =>
 
     console.log(__dirname);
 
-    main_gui.webContents.openDevTools()     // debug
+    // main_gui.webContents.openDevTools()     // debug
 
     // Main Process --> Renderer Process
     // const crop_setting = GetCropConfig()
@@ -144,6 +144,8 @@ ipcMain.handle("edit_file", (e, arg) => {
         edit_file_name = config.param_xls.excel;
     } else if (arg == "testcase_xlsx") {
         edit_file_name = config.test_case_xls.excel;
+    } else if (arg == "config") {
+        edit_file_name = path.join(cur_dir, "config.ini");
     } else {
         console.log(arg + " is not found.");
         return;
