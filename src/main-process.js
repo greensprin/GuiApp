@@ -35,7 +35,13 @@ app.on( 'ready', () =>
 
     console.log(__dirname);
 
-    //main_gui.webContents.openDevTools()     // debug
+    main_gui.webContents.openDevTools()     // debug
+
+    // Main Process --> Renderer Process
+    // const crop_setting = GetCropConfig()
+    // console.log(crop_setting)
+    // main_gui.webContents.send("get_crop_config", crop_setting)
+
 } )
 
 
@@ -102,7 +108,8 @@ ipcMain.handle("write_param", (e, arg) => {
     // 基本的には1ファイルしかないことを想定していいと思うが一応
     filenames.forEach((filename) => {
         // コマンド設定
-        const cmd = `notepad ${path.join(dir, filename)}` ; 
+        // const cmd = `notepad ${path.join(dir, filename)}` ; 
+        const cmd = `${path.join(dir, filename)}` ; 
         console.log(cmd);
         // コマンド実行
         childProcess.exec(cmd);
@@ -118,6 +125,39 @@ ipcMain.handle("process_kill", (e) => {
 //process.on("SIGINT" , clean_up());
 //process.on("SIGTERM", clean_up());
 //process.on("SIGQUIT", clean_up());
+
+ipcMain.handle("get_crop_setting", (e) => {
+    const crop_setting = GetCropConfig();
+    return crop_setting;
+});
+
+// for edit.html
+ipcMain.handle("edit_file", (e, arg) => {
+    const config = ini.parse(fs.readFileSync(path.join(cur_dir, "config.ini"), "utf8")); // read config.ini
+    var edit_file_name = "";
+
+    if        (arg == "blocks_xlsx") {
+        edit_file_name = config.blocks_file.excel;
+    } else if (arg == "blocks_vsdx") {
+        edit_file_name = config.blocks_file.visio;
+    } else if (arg == "param_xlsx") {
+        edit_file_name = config.param_xls.excel;
+    } else if (arg == "testcase_xlsx") {
+        edit_file_name = config.test_case_xls.excel;
+    } else {
+        console.log(arg + " is not found.");
+        return;
+    }
+
+    console.log(edit_file_name);
+
+    // コマンド設定
+    const cmd = `${edit_file_name}` ; 
+    console.log(cmd);
+    // コマンド実行
+    childProcess.exec(cmd);
+
+});
 
 function runCmdSpawn(cmd, script="", pattern_file="") {
     if (process_state === 0) {
@@ -172,4 +212,23 @@ function writePatternFile(pattern_file, ary_arg) {
 
 function clean_up() {
     process.kill(pid);
+}
+
+function GetCropConfig() {
+    var crop_setting = []
+
+    if (fs.existsSync(path.join(cur_dir, "crop_config.ini"))) {
+        const config = ini.parse(fs.readFileSync(path.join(cur_dir, "crop_config.ini"), "utf8")); // read config.ini
+
+        crop_setting.push(config.common.enable)
+        crop_setting.push(config.common.full_img_num)
+        crop_setting.push(config.common.cf_blob_num)
+        crop_setting.push(config.crop.sta_x)
+        crop_setting.push(config.crop.sta_y)
+        crop_setting.push(config.crop.end_or_size)
+        crop_setting.push(config.crop.end_x)
+        crop_setting.push(config.crop.end_y)
+    }
+
+    return crop_setting
 }

@@ -6,7 +6,40 @@ $(function() {
   // Crop メニューを押した時の処理
   $("#crop").on("click", function() {
     url = "crop.html";
-    window.open(url, "", "width=245, height=430");
+    const win = window.open(url, "", "width=245, height=430");
+
+    // console.log(win.document.getElementById("sta_x"))
+
+    // const crop_setting_promise = window.api.get_crop_setting();
+    // console.log(crop_setting_promise)
+
+    // let crop_setting;
+    // crop_setting_promise.then((res, failres) => { // promise objectの使い方がよくわかっていない
+    //   crop_setting = res;
+    //   console.log(crop_setting)
+    //   SetCropSetting(win, crop_setting);
+    // })
+
+  })
+
+  // edit メニューを押した時の処理
+  $("#edit").on("click", function() {
+    url = "edit.html";
+    const win = window.open(url, "", "width=245, height=430");
+  })
+
+  // edit メニューのファイル編集ボタンを押したときの処理
+  $("#edit-blocks-xlsx").on("click", function() {
+    window.api.edit_file("blocks_xlsx");   
+  })
+  $("#edit-blocks-vsdx").on("click", function() {
+    window.api.edit_file("blocks_vsdx");   
+  })
+  $("#edit-param-xlsx").on("click", function() {
+    window.api.edit_file("param_xlsx");   
+  })
+  $("#edit-testcase-xlsx").on("click", function() {
+    window.api.edit_file("testcase_xlsx");   
   })
 
   $("#run").on("click", function() {
@@ -81,6 +114,23 @@ $(function() {
     const text_str = $(this).text().replace(/\r?\n/g, "").trim();
     window.api.write_param(text_str);
   })
+
+  // Cropの設定値を取得して再設定する
+  function SetCropSetting(win, crop_setting) {
+    //console.log(crop_setting.length)
+    if (crop_setting.length != 0) {
+      //if (crop_setting[0] == 1) {
+      //  $(win.document).find(".crop_onoff-toggle").prop("checked", true)
+      //}
+      //$(win.document).find(".img-num-select").val(crop_setting[1])
+      //$(win.document).find(".cf-blob-num-select").val(crop_setting[2])
+      //$(win.document).find("#sta_x").val(crop_setting[3])
+      //$(win.document).find("#sta_y").val(crop_setting[4])
+      //$(win.document).find("*[name=end_or_size]").val(crop_setting[5])
+      //$(win.document).find("#end_x").val(crop_setting[6])
+      //$(win.document).find("#end_y").val(crop_setting[7])
+    }
+  }
 
 
   // ===== Child =======

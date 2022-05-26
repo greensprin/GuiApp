@@ -5,3 +5,5 @@ src/pattern/*
 src/dist/*
 
 src/pattern.txt
+
+src/tool/__pycache__

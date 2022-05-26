@@ -76,7 +76,7 @@ header {
   // position
   position: relative;
   // font
-  font-size: 14px;
+  font-size: 12px;
   // color
   color: white;
   background-color: gray;
@@ -193,4 +193,21 @@ header {
     margin-left: 0px;
   }
 
+}
+
+.header-btn {
+  display: flex;
+}
+
+.edit-btn-list {
+  display: flex;
+}
+
+.edit-list {
+  margin-top : 10px;
+  margin-left: 5px;
+}
+
+.edit-file-name {
+  margin-left: 10px;
 }
