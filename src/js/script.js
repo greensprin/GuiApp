@@ -42,6 +42,14 @@ $(function() {
     $("#edit-testcase-xlsx").on("click", function() {
       window.api.edit_file("testcase_xlsx");   
     })
+    
+    // gen
+    $("#gen-param").on("click", function() {
+      window.api.edit_file("gen_param");   
+    })
+    $("#gen-blocks").on("click", function() {
+      window.api.edit_file("gen_blocks");   
+    })
   }
 
   // config を開く

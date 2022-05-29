@@ -146,19 +146,29 @@ ipcMain.handle("edit_file", (e, arg) => {
         edit_file_name = config.test_case_xls.excel;
     } else if (arg == "config") {
         edit_file_name = path.join(cur_dir, "config.ini");
+    } else if (arg == "gen_param") {
+        edit_file_name = config.param_xls.script;
+    } else if (arg == "gen_blocks") {
+        edit_file_name = config.blocks_file.script;
     } else {
         console.log(arg + " is not found.");
         return;
     }
 
-    console.log(edit_file_name);
-
     // コマンド設定
     const cmd = `${edit_file_name}` ; 
     console.log(cmd);
-    // コマンド実行
-    childProcess.exec(cmd);
 
+    // コマンド実行
+    let child = childProcess.exec(cmd);
+
+    // Log出力
+    child.stdout.on("data", (data) => { // 標準出力
+        console.log(data.toString());
+    })
+    child.stderr.on("data", (data) => { // エラー出力
+        console.log(data.toString());
+    })
 });
 
 function runCmdSpawn(cmd, script="", pattern_file="") {
