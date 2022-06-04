@@ -7,56 +7,76 @@
   <title>edit menu</title>
 </head>
 <body>
+  <!-- Menu -->
+  <header>
+      <div id="config" class="sm-btn">
+        <p>config</p>
+      </div>
+    </div>
+  </header>
 
   <!-- for blocks xls/vsdx -->
-  <div class="edit-list">
-    <div class="edit-file-name">
-      <div>
-        <p>blocks.xlsx, vsdx</p>
+  <div class="edit-container">
+    <div class="edit-list">
+      <div class="edit-file-name">
+        <div>
+          <p>blocks.xlsx, vsdx</p>
+        </div>
+      </div>
+      <div class="edit-btn-list">
+        <div class="btn-style" id="edit-blocks-xlsx">
+          <p>edit excel</p>
+        </div>
+        <div class="btn-style" id="edit-blocks-vsdx">
+          <p>edit visio</p>
+        </div>
+        <div class="btn-style" id="gen-blocks">
+          <p>gen</p>
+        </div>
       </div>
     </div>
-    <div class="edit-btn-list">
-      <div class="btn-style" id="edit-blocks-xlsx">
-        <p>edit excel</p>
+
+    <!-- for param xls  -->
+    <div class="edit-list">
+      <div class="edit-file-name">
+        <div>
+          <p>param.xlsx</p>
+        </div>
       </div>
-      <div class="btn-style" id="edit-blocks-vsdx">
-        <p>edit visio</p>
+      <div class="edit-btn-list">
+        <div class="btn-style" id="edit-param-xlsx">
+          <p>edit</p>
+        </div>
+        <div class="btn-style" id="gen-param">
+          <p>gen</p>
+        </div>
       </div>
-      <div class="btn-style" id="gen-blocks">
-        <p>gen</p>
+    </div>
+
+    <!-- for test_case xls  -->
+    <div class="edit-list">
+      <div class="edit-file-name">
+        <div>
+          <p>test_case.xlsx</p>
+        </div>
       </div>
+      <div class="edit-btn-list">
+        <div class="btn-style" id="edit-testcase-xlsx">
+          <p>edit</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="back-btn">
+      <a href="renderer-process.html">← back</a>
     </div>
   </div>
 
-  <!-- for param xls  -->
-  <div class="edit-list">
-    <div class="edit-file-name">
-      <div>
-        <p>param.xlsx</p>
-      </div>
+  <div class="cmd-area">
+    <div class="top-header">
+      <p>cmd</p>
     </div>
-    <div class="edit-btn-list">
-      <div class="btn-style" id="edit-param-xlsx">
-        <p>edit</p>
-      </div>
-      <div class="btn-style" id="gen-param">
-        <p>gen</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- for test_case xls  -->
-  <div class="edit-list">
-    <div class="edit-file-name">
-      <div>
-        <p>test_case.xlsx</p>
-      </div>
-    </div>
-    <div class="edit-btn-list">
-      <div class="btn-style" id="edit-testcase-xlsx">
-        <p>edit</p>
-      </div>
-    </div>
+    <textarea readonly id="textarea1"></textarea>
   </div>
   
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

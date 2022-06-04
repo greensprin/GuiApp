@@ -8,18 +8,20 @@ const ini = require("ini");
 
 let main_gui = null;
 let process_state = 0; // process状態保存
+let message_flg = 0;
 let pid = 0;
+let cmd_message = "";
 
 const cur_dir = process.cwd();
 
 app.on( 'ready', () =>
 {
     let win_option = {
-        //frame: false,
-        width: 400,
-        height: 700,
-        minWidth: 400,
-        minHeight: 350,
+        // frame: false,
+        width    : 1000,
+        height   : 700,
+        minWidth : 400,
+        minHeight: 400,
         autoHideMenuBar: true, // menu bar を自動で消してくれる
         webPreferences: {
             experimentalFeatures:   false,
@@ -42,6 +44,24 @@ app.on( 'ready', () =>
     // console.log(crop_setting)
     // main_gui.webContents.send("get_crop_config", crop_setting)
 
+    // Main -> Renderer
+    let timerID = setInterval(()=> {
+        if (process_state === 1) {
+            message_flg = 1
+            main_gui.webContents.send("cmd_message", cmd_message);
+        } else if (message_flg === 1) {
+            main_gui.webContents.send("cmd_message", cmd_message);
+            message_flg = 0;
+            cmd_message = ""; // 一旦messageを削除しておく。追加し続けると、膨大な要領になり重くなるかもしれないので
+        }
+    }, 250)
+
+    // 終了処理
+    main_gui.on("close", () => {
+        // Main -> Renderer処理を終了させる
+        clearInterval(timerID);
+    })
+
 } )
 
 
@@ -62,10 +82,11 @@ ipcMain.handle("sample2", (e, ary_arg) => {
     // python script 実行 (pattern実行)
     const config = ini.parse(fs.readFileSync(path.join(cur_dir, "config.ini"), "utf8")); // read config.ini
     const script = path.join(cur_dir, config.run.script);
-    runCmdSpawn("python", script, pattern_file);
+    const message = runCmdSpawn("python", script, pattern_file);
+    return message;
 });
 
-ipcMain.handle("show_pat", (e) => {
+ipcMain.handle("gen_test_case", (e) => {
     const config = ini.parse(fs.readFileSync(path.join(cur_dir, "config.ini"), "utf8")); // read config.ini
     const script = path.join(cur_dir, config.test_case.script);
     const message = childProcess.execSync("python " + script).toString();
@@ -146,10 +167,6 @@ ipcMain.handle("edit_file", (e, arg) => {
         edit_file_name = config.test_case_xls.excel;
     } else if (arg == "config") {
         edit_file_name = path.join(cur_dir, "config.ini");
-    } else if (arg == "gen_param") {
-        edit_file_name = config.param_xls.script;
-    } else if (arg == "gen_blocks") {
-        edit_file_name = config.blocks_file.script;
     } else {
         console.log(arg + " is not found.");
         return;
@@ -159,38 +176,73 @@ ipcMain.handle("edit_file", (e, arg) => {
     const cmd = `${edit_file_name}` ; 
     console.log(cmd);
 
-    // コマンド実行
-    let child = childProcess.exec(cmd);
+    if (fs.existsSync(cmd)) {
+        // コマンド実行
+        let child = childProcess.exec(cmd);
+    } else {
+        cmd_message = `${cmd} is not found.`
+        message_flg = 1;
+    }
 
-    // Log出力
-    child.stdout.on("data", (data) => { // 標準出力
-        console.log(data.toString());
-    })
-    child.stderr.on("data", (data) => { // エラー出力
-        console.log(data.toString());
-    })
+    // // Log出力
+    // child.stdout.on("data", (data) => { // 標準出力
+    //     console.log(data.toString());
+    // })
+    // child.stderr.on("data", (data) => { // エラー出力
+    //     console.log(data.toString());
+    // })
+});
+
+ipcMain.handle("gen_script", (e, arg) => {
+    const config = ini.parse(fs.readFileSync(path.join(cur_dir, "config.ini"), "utf8")); // read config.ini
+    let cmd = ""
+
+    if        (arg == "gen_param") {
+        cmd = config.param_xls.script;
+    } else if (arg == "gen_blocks") {
+        cmd = config.blocks_file.script;
+    } else {
+        cmd = "";
+    }
+
+    if (fs.existsSync(cmd)) {
+        runCmdSpawn(cmd)
+    } else {
+        cmd_message = `${cmd} is not found.`
+        message_flg = 1;
+    }
+
 });
 
 function runCmdSpawn(cmd, script="", pattern_file="") {
+    var message = ""
+
     if (process_state === 0) {
         process_state = 1; // process状態更新 (実行中)
+        message_flg = 1;
 
         const child = childProcess.spawn(cmd, [script, pattern_file]);
         pid = child.pid; // process id を保存
 
         child.stdout.on("data", (data) => {
             console.log(data.toString());
+            cmd_message += data.toString();
         });
         child.stderr.on("data", (data) => {
             console.log(data.toString());
+            cmd_message += data.toString();
         });
         child.on("close", (code) => {
             console.log(`child process close all stdio with code ${code}`);
             process_state = 0; // process状態更新 (終了)
+            cmd_message += `child process close all stdio with code ${code} \n`;
         })
     } else {
         console.log("process is already running.");
+        cmd_message += "process is already running. \n";
     }
+
+    return message;
 }
 
 function runCmd(cmd) {

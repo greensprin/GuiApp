@@ -6,7 +6,8 @@ $(function() {
   // Crop メニューを押した時の処理
   $("#crop").on("click", function() {
     url = "crop.html";
-    const win = window.open(url, "", "width=245, height=430");
+    // const win = window.open(url, "", "width=245, height=430");
+    window.location.href = url;
 
     // console.log(win.document.getElementById("sta_x"))
 
@@ -26,7 +27,8 @@ $(function() {
   {
     $("#edit").on("click", function() {
       url = "edit.html";
-      const win = window.open(url, "", "width=245, height=430");
+      //const win = window.open(url, "", "width=245, height=430");
+      window.location.href = url;
     })
 
     // edit メニューのファイル編集ボタンを押したときの処理
@@ -45,10 +47,10 @@ $(function() {
     
     // gen
     $("#gen-param").on("click", function() {
-      window.api.edit_file("gen_param");   
+      window.api.gen_script("gen_param");   
     })
     $("#gen-blocks").on("click", function() {
-      window.api.edit_file("gen_blocks");   
+      window.api.gen_script("gen_blocks");   
     })
   }
 
@@ -62,11 +64,16 @@ $(function() {
     const ary_list = get_check_list();
 
     // checkがついているものだけを実行
-    window.api.send_2(ary_list);
+    const message = window.api.send_2(ary_list);
+
+    // message.then((res, failres) => { // promise objectの使い方がよくわかっていない
+    //   const stdout = res.trim().split("\n");
+    //   console.log(stdout);
+    // });
   })
 
   $("#show-pat").on("click", function() {
-    const dir_res = window.api.show_pat();
+    const dir_res = window.api.gen_test_case();
     dir_res.then((res, failres) => { // promise objectの使い方がよくわかっていない
       const pattern_list = res.trim().split("\n");
       AddPatternList(pattern_list);
@@ -201,5 +208,22 @@ $(function() {
     console.log(ary_list);
 
     window.api.crop_config(ary_list);
+  })
+
+  // mainのcmd_messageをtextarea1に送る
+  window.api.on("cmd_message", (event, cmd_message) => {
+    const pre_scroll_top    = $("#textarea1").scrollTop();
+    const pre_scroll_height = $("#textarea1")[0].scrollHeight;
+    const outerHeight       = $("#textarea1").outerHeight();
+
+    $("#textarea1").val(cmd_message + "\n"); // messageを書き込む
+
+    if (pre_scroll_height === (pre_scroll_top + outerHeight)) { // スクロールが最下部にあるときだけ、最下部にはりつける
+      $("#textarea1").scrollTop($("#textarea1")[0].scrollHeight);
+    }
+
+    // console.log($("#textarea1").scrollTop());
+    // console.log($("#textarea1")[0].scrollHeight);
+    // console.log($("#textarea1").outerHeight());
   })
 })
