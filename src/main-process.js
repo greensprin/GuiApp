@@ -60,10 +60,12 @@ app.on( 'ready', () =>
     main_gui.on("close", () => {
         // Main -> Renderer処理を終了させる
         clearInterval(timerID);
+
+        // processが残っていたらkillする
+        // process.kill(pid);
     })
 
 } )
-
 
 // ==== IPC通信 ====
 ipcMain.handle("sample", (e, arg) => {

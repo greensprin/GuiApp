@@ -1,4 +1,14 @@
 $(function() {
+  { // Crop設定を行う (crop.htmlの時のみ意味のある処理)
+    const crop_setting_promise = window.api.get_crop_setting();
+
+    crop_setting_promise.then((res, failres) => { // promise objectの使い方がよくわかっていない
+      console.log(res)
+      SetCropSetting(res);
+    })
+
+  }
+
   $("#button1").on("click", function() {
     window.api.send("good job");
   })
@@ -8,19 +18,6 @@ $(function() {
     url = "crop.html";
     // const win = window.open(url, "", "width=245, height=430");
     window.location.href = url;
-
-    // console.log(win.document.getElementById("sta_x"))
-
-    // const crop_setting_promise = window.api.get_crop_setting();
-    // console.log(crop_setting_promise)
-
-    // let crop_setting;
-    // crop_setting_promise.then((res, failres) => { // promise objectの使い方がよくわかっていない
-    //   crop_setting = res;
-    //   console.log(crop_setting)
-    //   SetCropSetting(win, crop_setting);
-    // })
-
   })
 
   // edit メニューを押した時の処理
@@ -137,78 +134,99 @@ $(function() {
     window.api.write_param(text_str);
   })
 
-  // Cropの設定値を取得して再設定する
-  function SetCropSetting(win, crop_setting) {
-    //console.log(crop_setting.length)
-    if (crop_setting.length != 0) {
-      //if (crop_setting[0] == 1) {
-      //  $(win.document).find(".crop_onoff-toggle").prop("checked", true)
-      //}
-      //$(win.document).find(".img-num-select").val(crop_setting[1])
-      //$(win.document).find(".cf-blob-num-select").val(crop_setting[2])
-      //$(win.document).find("#sta_x").val(crop_setting[3])
-      //$(win.document).find("#sta_y").val(crop_setting[4])
-      //$(win.document).find("*[name=end_or_size]").val(crop_setting[5])
-      //$(win.document).find("#end_x").val(crop_setting[6])
-      //$(win.document).find("#end_y").val(crop_setting[7])
+  // ===== Child =======
+  {
+    // == crop ==
+    $(".crop-onoff-label").on("click", function() {
+      SetCropOnOffText();
+    })
+
+    function SetCropOnOffText() {
+      var state_txt = " Crop: ";
+      if ($(".crop-onoff-toggle").prop("checked") == true) {
+        state_txt = state_txt + "ON";
+      } else {
+        state_txt = state_txt + "OFF";
+      }
+
+      $(".onoff-state").text(state_txt);
+    }
+
+    $("#apply").on("click", function() {
+      var ary_list = []; // ここに入れる
+
+      // ON/OFF
+      if ($(".crop-onoff-toggle").prop("checked") == true) {
+        ary_list.push(1);
+      } else {
+        ary_list.push(0);
+      }
+
+      // full img num
+      var full_img_num = $("select[name=img-num-select]").val();
+      ary_list.push(full_img_num);
+
+      // cf blob
+      var cf_blob_num = $("select[name=cf-blob-num-select]").val();
+      ary_list.push(cf_blob_num);
+
+      // start x, y
+      var sta_x = $("#sta_x").val();
+      if (sta_x === "") sta_x = 0
+      var sta_y = $("#sta_y").val();
+      if (sta_y === "") sta_y = 0
+      ary_list.push(sta_x);
+      ary_list.push(sta_y);
+
+      // end or size
+      var end_or_size = $("select[name=end_or_size]").val();
+      ary_list.push(end_or_size);
+      // end x, y
+      var end_x = $("#end_x").val();
+      if (end_x === "") end_x = 0
+      var end_y = $("#end_y").val();
+      if (end_y === "") end_y = 0
+      ary_list.push(end_x);
+      ary_list.push(end_y);
+
+      console.log(ary_list);
+
+      window.api.crop_config(ary_list);
+      SetCropSetting(ary_list);
+    })
+
+    $("#crop-reset").on("click", () => {
+      var ary_list = ["0", 1, 6, "", "", "end", "", ""];
+      window.api.crop_config(ary_list);
+      SetCropSetting(ary_list);
+    })
+
+    // Cropの設定値を取得して再設定する
+    function SetCropSetting(crop_setting) {
+      if (crop_setting.length != 0) {
+        if (crop_setting[0] == "1") {
+          $(".crop-onoff-toggle").prop("checked", true);
+          SetCropOnOffText();
+
+          const pre_title = $("title").html();
+          $("title").html(pre_title + " [crop]")
+        } else {
+          $(".crop-onoff-toggle").prop("checked", false);
+          SetCropOnOffText();
+
+          const pre_title = $("title").html();
+          $("title").html(pre_title.replace(" [crop]", ""))
+        }
+        $("*[name=img-num-select]")    .val(crop_setting[1]);
+        $("*[name=cf-blob-num-select]").val(crop_setting[2]);
+        $("#sta_x")                    .val(crop_setting[3]);
+        $("#sta_y")                    .val(crop_setting[4]);
+        $("*[name=end_or_size]")       .val(crop_setting[5]);
+        $("#end_x")                    .val(crop_setting[6]);
+        $("#end_y")                    .val(crop_setting[7]);
+      }
     }
   }
-
-
-  // ===== Child =======
-  // == crop ==
-  $(".crop-onoff-label").on("click", function() {
-    var state_txt = " Crop: ";
-    if ($(".crop-onoff-toggle").prop("checked") == true) {
-      state_txt = state_txt + "ON";
-    } else {
-      state_txt = state_txt + "OFF";
-    }
-
-    $(".onoff-state").text(state_txt);
-  })
-
-  $("#apply").on("click", function() {
-    var ary_list = []; // ここに入れる
-
-    // ON/OFF
-    if ($(".crop-onoff-toggle").prop("checked") == true) {
-      ary_list.push(1);
-    } else {
-      ary_list.push(0);
-    }
-
-    // full img num
-    var full_img_num = $("select[name=img-num-select]").val();
-    ary_list.push(full_img_num);
-
-    // cf blob
-    var cf_blob_num = $("select[name=cf-blob-num-select]").val();
-    ary_list.push(cf_blob_num);
-
-    // start x, y
-    var sta_x = $("#sta_x").val();
-    if (sta_x === "") sta_x = 0
-    var sta_y = $("#sta_y").val();
-    if (sta_y === "") sta_y = 0
-    ary_list.push(sta_x);
-    ary_list.push(sta_y);
-
-    // end or size
-    var end_or_size = $("select[name=end_or_size]").val();
-    ary_list.push(end_or_size);
-    // end x, y
-    var end_x = $("#end_x").val();
-    if (end_x === "") end_x = 0
-    var end_y = $("#end_y").val();
-    if (end_y === "") end_y = 0
-    ary_list.push(end_x);
-    ary_list.push(end_y);
-
-    console.log(ary_list);
-
-    window.api.crop_config(ary_list);
-  })
 
   // mainのcmd_messageをtextarea1に送る
   window.api.on("cmd_message", (event, cmd_message) => {

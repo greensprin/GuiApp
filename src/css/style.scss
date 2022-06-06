@@ -190,11 +190,14 @@ header {
     display: flex;
   }
 
-  .apply-btn {
-    margin-top: 30px;
-    margin-left: 0px;
-  }
+  // .apply-btn {
+  //   margin-top: 30px;
+  //   margin-left: 0px;
+  // }
 
+  .crop-apply-reset-btn {
+    display: flex;
+  }
 }
 
 .header-btn {
