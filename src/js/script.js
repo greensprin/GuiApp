@@ -196,7 +196,7 @@ $(function() {
     })
 
     $("#crop-reset").on("click", () => {
-      var ary_list = ["0", 1, 6, "", "", "end", "", ""];
+      var ary_list = ["0", 1, 6, 0, 0, "end", 0, 0];
       window.api.crop_config(ary_list);
       SetCropSetting(ary_list);
     })
@@ -208,7 +208,7 @@ $(function() {
           $(".crop-onoff-toggle").prop("checked", true);
           SetCropOnOffText();
 
-          const pre_title = $("title").html();
+          const pre_title = $("title").html().replace(" [crop]", "");
           $("title").html(pre_title + " [crop]")
         } else {
           $(".crop-onoff-toggle").prop("checked", false);
