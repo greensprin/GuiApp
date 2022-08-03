@@ -9,6 +9,7 @@ contextBridge.exposeInMainWorld("api", {
   get_crop_setting: async (data) => await ipcRenderer.invoke("get_crop_setting", data),
   edit_file       : async (data) => await ipcRenderer.invoke("edit_file", data),
   gen_script      : async (data) => await ipcRenderer.invoke("gen_script", data),
+  select_file     : async (data) => await ipcRenderer.invoke("select_file", data),
 
   on: (channel, callback) => ipcRenderer.on(channel, (event, argv) => callback(event, argv)),
 });

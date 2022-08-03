@@ -3,7 +3,7 @@ $(function() {
     const crop_setting_promise = window.api.get_crop_setting();
 
     crop_setting_promise.then((res, failres) => { // promise objectの使い方がよくわかっていない
-      console.log(res)
+      // console.log(res)
       SetCropSetting(res);
     })
 
@@ -244,4 +244,20 @@ $(function() {
     // console.log($("#textarea1")[0].scrollHeight);
     // console.log($("#textarea1").outerHeight());
   })
+
+  {
+    $("#select-file").on("click", function() {
+      const file_name = window.api.select_file();
+      file_name.then((res, failres) => { // promise objectの使い方がよくわかっていない
+        if (res != undefined) { // ファイルが選択されたときのみ処理をする
+          const file_path = res;
+          $("#select-file-text-box").text(file_path);
+        }
+      });
+    })
+
+    window.api.on("select_ini_file", (event, select_ini_file) => {
+      $("#select-file-text-box").text(select_ini_file);
+    })
+  }
 })

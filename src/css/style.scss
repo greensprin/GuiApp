@@ -256,3 +256,28 @@ header {
     top:-45px;
   }
 }
+
+#select-file-text {
+  display: inline-block;
+  position: fixed;
+  right: 0.4rem;
+  top: 4.5rem;
+  z-index: 9999;
+  color: #424242;
+  font-size: 12px;
+  text-align: right;
+
+  & .select-file-btn {
+    display:inline-block;
+    cursor: pointer;
+    margin-bottom: 0.3rem;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    transition: background-color .2s;
+
+    &:hover {
+      background-color: #ffc04a;
+    }
+  }
+}

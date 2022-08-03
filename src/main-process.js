@@ -1,6 +1,6 @@
 'use strict'
 
-const { app, BrowserWindow, ipcMain } = require( 'electron' );
+const { app, BrowserWindow, ipcMain, dialog } = require( 'electron' );
 const childProcess = require("child_process");
 const fs = require("fs");
 const path = require("path");
@@ -12,7 +12,10 @@ let message_flg = 0;
 let pid = 0;
 let cmd_message = "";
 
-const cur_dir = process.cwd();
+// const cur_dir = process.cwd(); // cur_dirではなくtool pathとかにした方が良い
+const tool_dir = process.cwd(); // これはツールのフォルダパスを記憶しておく
+let   cur_dir = process.cwd(); // これは今いるフォルダの位置を保存しておく
+let   select_ini_file = "not select ini file";
 
 app.on( 'ready', () =>
 {
@@ -54,6 +57,8 @@ app.on( 'ready', () =>
             message_flg = 0;
             cmd_message = ""; // 一旦messageを削除しておく。追加し続けると、膨大な要領になり重くなるかもしれないので
         }
+
+        main_gui.webContents.send("select_ini_file", select_ini_file);
     }, 250)
 
     // 終了処理
@@ -72,7 +77,8 @@ ipcMain.handle("sample", (e, arg) => {
     console.log(arg);
     
     //let cmd = "python " + __dirname + "\\tool\\sample.py";
-    let cmd = "python " + cur_dir + "\\tool\\sample.py";
+    // let cmd = "python " + cur_dir + "\\tool\\sample.py";
+    let cmd = "python " + tool_dir + "\\tool\\sample.py";
     runCmd(cmd);
 });
 
@@ -83,14 +89,16 @@ ipcMain.handle("sample2", (e, ary_arg) => {
 
     // python script 実行 (pattern実行)
     const config = ini.parse(fs.readFileSync(path.join(cur_dir, "config.ini"), "utf8")); // read config.ini
-    const script = path.join(cur_dir, config.run.script);
+    // const script = path.join(cur_dir, config.run.script);
+    const script = path.join(tool_dir, config.run.script);
     const message = runCmdSpawn("python", script, pattern_file);
     return message;
 });
 
 ipcMain.handle("gen_test_case", (e) => {
     const config = ini.parse(fs.readFileSync(path.join(cur_dir, "config.ini"), "utf8")); // read config.ini
-    const script = path.join(cur_dir, config.test_case.script);
+    // const script = path.join(cur_dir, config.test_case.script);
+    const script = path.join(tool_dir, config.test_case.script);
     const message = childProcess.execSync("python " + script).toString();
     return message;
 });
@@ -214,6 +222,30 @@ ipcMain.handle("gen_script", (e, arg) => {
         message_flg = 1;
     }
 
+});
+
+ipcMain.handle("select_file", (e) => {
+    const file_name = dialog.showOpenDialogSync(null, {
+        properties: ["openFile"],
+        title: "Select config.ini",
+        defaultPath: ".",
+        filters: [
+            {name: "ini file", extensions: ["ini"]}
+        ]
+    });
+
+    if (file_name != undefined) { // ファイルが選ばれたときだけ処理をする
+        if (path.basename(file_name[0]) === "config.ini") { // config.iniが選択されたときだけ処理をする
+            cur_dir = path.dirname(file_name[0]);
+            process.chdir(cur_dir)
+            // console.log(process.cwd()); // debug
+            select_ini_file = file_name[0];
+        } else { // config.iniというファイル名ではない場合は注意を出す
+            select_ini_file = 'You must select "config.ini" !!!'
+        }
+    }
+
+    return select_ini_file
 });
 
 function runCmdSpawn(cmd, script="", pattern_file="") {
