@@ -80,7 +80,7 @@ function writeLog(message, basefilename) {
     var year  = ('0000' + today.getFullYear()).slice(-4);
     var month = ('00' + (today.getMonth()+1)).slice(-2);
     var day   = ('00' + today.getDate()).slice(-2);
-    var fileName = `ProcyonGUI_${basefilename}_${year}${month}${day}.log`;
+    var fileName = `${year}${month}${day}_${basefilename}.log`;
     log.transports.file.resolvePath = () => path.join(cur_dir, `logs/${fileName}`);
     log.info(cmd_message);
 }
