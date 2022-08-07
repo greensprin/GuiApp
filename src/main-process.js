@@ -5,6 +5,7 @@ const childProcess = require("child_process");
 const fs = require("fs");
 const path = require("path");
 const ini = require("ini");
+const log = require("electron-log");
 
 let main_gui = null;
 let process_state = 0; // process状態保存
@@ -55,6 +56,8 @@ app.on( 'ready', () =>
         } else if (message_flg === 1) {
             main_gui.webContents.send("cmd_message", cmd_message);
             message_flg = 0;
+            writeLog(cmd_message, "run");
+
             cmd_message = ""; // 一旦messageを削除しておく。追加し続けると、膨大な要領になり重くなるかもしれないので
         }
 
@@ -71,6 +74,16 @@ app.on( 'ready', () =>
     })
 
 } )
+
+function writeLog(message, basefilename) {
+    var today = new Date();
+    var year  = ('0000' + today.getFullYear()).slice(-4);
+    var month = ('00' + (today.getMonth()+1)).slice(-2);
+    var day   = ('00' + today.getDate()).slice(-2);
+    var fileName = `ProcyonGUI_${basefilename}_${year}${month}${day}.log`;
+    log.transports.file.resolvePath = () => path.join(cur_dir, `logs/${fileName}`);
+    log.info(cmd_message);
+}
 
 // ==== IPC通信 ====
 ipcMain.handle("sample", (e, arg) => {
@@ -100,6 +113,7 @@ ipcMain.handle("gen_test_case", (e) => {
     // const script = path.join(cur_dir, config.test_case.script);
     const script = path.join(tool_dir, config.test_case.script);
     const message = childProcess.execSync("python " + script).toString();
+    writeLog(message.toString(), "gen_test_case");
     return message;
 });
 
